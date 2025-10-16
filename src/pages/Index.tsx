@@ -10,12 +10,12 @@ import { toast } from "sonner";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [searchResults, setSearchResults] = useState(mockMedicines.slice(0, 10));
+  const [searchResults, setSearchResults] = useState(mockMedicines);
   const [aiResults, setAiResults] = useState<typeof mockMedicines>([]);
 
   const handleSearch = (query: string) => {
     if (!query.trim()) {
-      setSearchResults(mockMedicines.slice(0, 10));
+      setSearchResults(mockMedicines);
       return;
     }
 
@@ -131,8 +131,8 @@ const Index = () => {
         <section className="space-y-6">
           <div className="text-center">
             <h2 className="text-3xl font-bold mb-2">
-              {searchResults.length === mockMedicines.slice(0, 10).length 
-                ? "Remédios Mais Comuns" 
+              {searchResults.length === mockMedicines.length 
+                ? `Todos os Remédios (${mockMedicines.length})` 
                 : `Resultados da Busca (${searchResults.length})`}
             </h2>
           </div>
