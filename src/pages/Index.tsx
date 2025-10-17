@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { MedicineCard } from "@/components/MedicineCard";
 import { SearchSection } from "@/components/SearchSection";
 import { PainAnalysisSection } from "@/components/PainAnalysisSection";
-import { mockMedicines, top10Medicines } from "@/data/extended-medicines";
+import { mockMedicines, top10Medicines } from "@/data/medicines";
 import { QuickSearchSection } from "@/components/QuickSearchSection";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles, Search, Zap } from "lucide-react";
@@ -14,6 +14,10 @@ const Index = () => {
   const [searchResults, setSearchResults] = useState(mockMedicines);
   const [aiResults, setAiResults] = useState<typeof mockMedicines>([]);
   const [showQuickSearch, setShowQuickSearch] = useState(false);
+  const [showDirectSearch, setShowDirectSearch] = useState(false);
+  
+  const directSearchRef = useRef<HTMLDivElement>(null);
+  const aiSectionRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = (query: string) => {
     if (!query.trim()) {
@@ -99,7 +103,13 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="text-center hover:shadow-lg transition-shadow border-primary/20">
+            <Card 
+              className="text-center hover:shadow-lg transition-shadow border-primary/20 cursor-pointer"
+              onClick={() => {
+                setShowDirectSearch(true);
+                setTimeout(() => directSearchRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+              }}
+            >
               <CardHeader>
                 <div className="mx-auto p-3 rounded-full bg-primary/10 w-fit mb-3">
                   <Search className="h-8 w-8 text-primary" />
@@ -109,7 +119,12 @@ const Index = () => {
               </CardHeader>
             </Card>
 
-            <Card className="text-center hover:shadow-lg transition-shadow border-secondary/20">
+            <Card 
+              className="text-center hover:shadow-lg transition-shadow border-secondary/20 cursor-pointer"
+              onClick={() => {
+                setTimeout(() => aiSectionRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+              }}
+            >
               <CardHeader>
                 <div className="mx-auto p-3 rounded-full bg-secondary/10 w-fit mb-3">
                   <Sparkles className="h-8 w-8 text-secondary" />
@@ -138,6 +153,7 @@ const Index = () => {
         )}
 
         {/* Busca Direta */}
+        <div ref={directSearchRef}></div>
         <section className="space-y-6">
           <div className="text-center">
             <h2 className="text-3xl font-bold mb-2">Pesquisa Direta</h2>
@@ -178,6 +194,7 @@ const Index = () => {
         </section>
 
         {/* Análise por IA */}
+        <div ref={aiSectionRef}></div>
         <section className="space-y-6">
           <PainAnalysisSection onAnalyze={handlePainAnalysis} />
           
