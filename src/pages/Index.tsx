@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { MedicineCard } from "@/components/MedicineCard";
 import { SearchSection } from "@/components/SearchSection";
 import { PainAnalysisSection } from "@/components/PainAnalysisSection";
-import { mockMedicines } from "@/data/medicines";
+import { mockMedicines, top10Medicines } from "@/data/extended-medicines";
+import { QuickSearchSection } from "@/components/QuickSearchSection";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles, Search, Zap } from "lucide-react";
 import { toast } from "sonner";
@@ -12,6 +13,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchResults, setSearchResults] = useState(mockMedicines);
   const [aiResults, setAiResults] = useState<typeof mockMedicines>([]);
+  const [showQuickSearch, setShowQuickSearch] = useState(false);
 
   const handleSearch = (query: string) => {
     if (!query.trim()) {
@@ -84,7 +86,10 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="text-center hover:shadow-lg transition-shadow border-primary/20">
+            <Card 
+              className="text-center hover:shadow-lg transition-shadow border-primary/20 cursor-pointer"
+              onClick={() => setShowQuickSearch(!showQuickSearch)}
+            >
               <CardHeader>
                 <div className="mx-auto p-3 rounded-full bg-primary/10 w-fit mb-3">
                   <Zap className="h-8 w-8 text-primary" />
@@ -115,6 +120,22 @@ const Index = () => {
             </Card>
           </div>
         </section>
+
+        {/* Procura Rápida Expandida */}
+        {showQuickSearch && (
+          <section className="space-y-6">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold mb-2">Procura Rápida</h2>
+              <p className="text-muted-foreground mb-6">
+                Selecione um dos 10 remédios mais comuns
+              </p>
+            </div>
+            <QuickSearchSection 
+              medicines={top10Medicines} 
+              onSelectMedicine={handleMedicineClick}
+            />
+          </section>
+        )}
 
         {/* Busca Direta */}
         <section className="space-y-6">
